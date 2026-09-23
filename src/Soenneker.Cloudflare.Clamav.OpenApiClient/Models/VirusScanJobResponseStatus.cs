@@ -5,7 +5,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
 {
     /// <summary>One of the serialized values defined by VirusScanJobStatus.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-    public enum VirusScanJobResponse_status
+    public enum VirusScanJobResponseStatus
     {
         [EnumMember(Value = "queued")]
         #pragma warning disable CS1591

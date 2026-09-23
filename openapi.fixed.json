@@ -1,0 +1,524 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "Soenneker.Cloudflare.Clamav",
+    "description": "ClamAV file scanning with Cloudflare Containers and R2 job storage. Supply your deployment URL as the API base address.",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Scanner"
+        ],
+        "summary": "Queries ClamAV for its version to check scanner readiness.",
+        "description": "This check does not verify R2 access or definition freshness. Version-query exceptions propagate.",
+        "operationId": "Health",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/scan": {
+      "post": {
+        "tags": [
+          "Scanner"
+        ],
+        "summary": "Accepts a raw file upload and waits for its scan verdict.",
+        "description": "The request body is written to a temporary file before ownership transfers to the scan pipeline.\nDisconnecting after enqueueing does not cancel the queued scan. Scan failures propagate to the HTTP pipeline.",
+        "operationId": "Scan",
+        "requestBody": {
+          "description": "Raw file bytes, not multipart form data. The default upload limit is 100 MiB and can be configured by the operator.",
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "$ref": "#/components/schemas/ScanOctetStreamRequestRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirusScanResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Scan401PlainResponseSchema"
+                },
+                "example": "Unauthorized"
+              }
+            }
+          },
+          "413": {
+            "description": "Payload Too Large",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ScannerApiKey": []
+          }
+        ]
+      }
+    },
+    "/scan/jobs": {
+      "post": {
+        "tags": [
+          "Scanner"
+        ],
+        "summary": "Accepts a raw file upload for background scanning and returns a polling location.",
+        "description": "Acceptance persists job metadata; uploaded files and pending work remain local to the container.",
+        "operationId": "Queue",
+        "requestBody": {
+          "description": "Raw file bytes, not multipart form data. The default upload limit is 100 MiB and can be configured by the operator.",
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "$ref": "#/components/schemas/QueueOctetStreamRequestRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirusScanJobAcceptedResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Queue401PlainResponseSchema"
+                },
+                "example": "Unauthorized"
+              }
+            }
+          },
+          "413": {
+            "description": "Payload Too Large",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ScannerApiKey": []
+          }
+        ]
+      }
+    },
+    "/scan/jobs/{jobId}": {
+      "get": {
+        "tags": [
+          "Scanner"
+        ],
+        "summary": "Retrieves the latest persisted state of a background scan.",
+        "operationId": "GetJob",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "description": "The job identifier in standard dashed GUID format.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirusScanJobResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetJob401PlainResponseSchema"
+                },
+                "example": "Unauthorized"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ScannerApiKey": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HealthResponse": {
+        "required": [
+          "ready"
+        ],
+        "type": "object",
+        "properties": {
+          "ready": {
+            "type": "boolean",
+            "description": "Whether ClamAV reported a version. This does not verify R2 access or definition freshness."
+          }
+        },
+        "description": "Reports whether the ClamAV version query returned a nonempty result."
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "title": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "status": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "format": "int32",
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "detail": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "instance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "VirusScanJobAcceptedResponse": {
+        "required": [
+          "id",
+          "status",
+          "statusUrl"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The job identifier in standard dashed GUID format.",
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/QueuedStatus"
+          },
+          "statusUrl": {
+            "type": "string",
+            "description": "An absolute status URL when available, otherwise a path relative to the service root."
+          }
+        },
+        "description": "Identifies an accepted background scan and the endpoint used to poll its progress."
+      },
+      "VirusScanJobResponse": {
+        "required": [
+          "id",
+          "status",
+          "result",
+          "error",
+          "createdAt",
+          "completedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The job identifier in standard dashed GUID format.",
+            "format": "uuid"
+          },
+          "status": {
+            "$ref": "#/components/schemas/VirusScanJobResponseStatus"
+          },
+          "result": {
+            "$ref": "#/components/schemas/VirusScanJobResponseResult"
+          },
+          "error": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "A failure description for a failed job, otherwise \u0060null\u0060."
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "The UTC timestamp at which the job was created.",
+            "format": "date-time"
+          },
+          "completedAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The UTC timestamp at which the job completed or failed, or \u0060null\u0060 while pending.",
+            "format": "date-time"
+          }
+        },
+        "description": "Represents a persisted snapshot of a background scan\u0027s lifecycle and outcome."
+      },
+      "VirusScanResponse": {
+        "required": [
+          "clean",
+          "threat",
+          "engine"
+        ],
+        "type": "object",
+        "properties": {
+          "clean": {
+            "type": "boolean",
+            "description": "Whether the scan reported the file as clean."
+          },
+          "threat": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The first detected signature, or \u0060null\u0060 when no detection was returned."
+          },
+          "engine": {
+            "type": "string",
+            "description": "The scanning engine name, currently \u0060ClamAV\u0060."
+          }
+        },
+        "description": "Contains the verdict returned by a completed malware scan."
+      },
+      "VirusScanJobResponseResult": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "null"
+          },
+          {
+            "description": "The scan verdict for a completed job, otherwise \u0060null\u0060.",
+            "$ref": "#/components/schemas/VirusScanResponse"
+          }
+        ],
+        "properties": {
+          "clean": {
+            "type": "boolean",
+            "description": "Whether the scan reported the file as clean."
+          },
+          "threat": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The first detected signature, or \u0060null\u0060 when no detection was returned."
+          },
+          "engine": {
+            "type": "string",
+            "description": "The scanning engine name, currently \u0060ClamAV\u0060."
+          }
+        }
+      },
+      "ScanOctetStreamRequest": {
+        "type": "string",
+        "format": "binary"
+      },
+      "Scan401PlainResponse": {
+        "type": "string"
+      },
+      "QueueOctetStreamRequest": {
+        "type": "string",
+        "format": "binary"
+      },
+      "Queue401PlainResponse": {
+        "type": "string"
+      },
+      "GetJob401PlainResponse": {
+        "type": "string"
+      },
+      "ExamplePayload": {
+        "type": "object",
+        "description": "Placeholder schema for path example refs"
+      },
+      "ScanOctetStreamRequestRequestBody": {
+        "type": "string",
+        "format": "binary"
+      },
+      "Scan401PlainResponseSchema": {
+        "type": "string"
+      },
+      "QueueOctetStreamRequestRequestBody": {
+        "type": "string",
+        "format": "binary"
+      },
+      "Queue401PlainResponseSchema": {
+        "type": "string"
+      },
+      "GetJob401PlainResponseSchema": {
+        "type": "string"
+      },
+      "QueuedStatus": {
+        "enum": [
+          "queued"
+        ],
+        "type": "string",
+        "additionalProperties": false,
+        "description": "The initial job status, \u0060queued\u0060.",
+        "x-ms-enum": {
+          "name": "QueuedStatus",
+          "modelAsString": false,
+          "values": [
+            {
+              "value": "queued",
+              "name": "Queued"
+            }
+          ]
+        }
+      },
+      "VirusScanJobResponseStatus": {
+        "enum": [
+          "queued",
+          "processing",
+          "completed",
+          "failed"
+        ],
+        "type": "string",
+        "additionalProperties": false,
+        "description": "One of the serialized values defined by VirusScanJobStatus.",
+        "x-ms-enum": {
+          "name": "VirusScanJobResponseStatus",
+          "modelAsString": false,
+          "values": [
+            {
+              "value": "queued",
+              "name": "Queued"
+            },
+            {
+              "value": "processing",
+              "name": "Processing"
+            },
+            {
+              "value": "completed",
+              "name": "Completed"
+            },
+            {
+              "value": "failed",
+              "name": "Failed"
+            }
+          ]
+        }
+      }
+    },
+    "securitySchemes": {
+      "ScannerApiKey": {
+        "type": "http",
+        "description": "The operator-configured Scanner:ApiKey supplied as Authorization: Bearer \u003Ckey\u003E. This is an API key, not a JWT.",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Scanner"
+    }
+  ]
+}

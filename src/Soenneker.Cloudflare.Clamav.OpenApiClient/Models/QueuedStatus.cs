@@ -5,7 +5,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
 {
     /// <summary>The initial job status, `queued`.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-    public enum VirusScanJobAcceptedResponse_status
+    public enum QueuedStatus
     {
         [EnumMember(Value = "queued")]
         #pragma warning disable CS1591

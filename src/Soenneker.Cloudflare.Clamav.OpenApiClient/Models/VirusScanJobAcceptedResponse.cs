@@ -18,7 +18,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
         /// <summary>The job identifier in standard dashed GUID format.</summary>
         public Guid? Id { get; set; }
         /// <summary>The initial job status, `queued`.</summary>
-        public global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobAcceptedResponse_status? Status { get; set; }
+        public global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.QueuedStatus? Status { get; set; }
         /// <summary>An absolute status URL when available, otherwise a path relative to the service root.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -53,7 +53,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "id", n => { Id = n.GetGuidValue(); } },
-                { "status", n => { Status = n.GetEnumValue<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobAcceptedResponse_status>(); } },
+                { "status", n => { Status = n.GetEnumValue<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.QueuedStatus>(); } },
                 { "statusUrl", n => { StatusUrl = n.GetStringValue(); } },
             };
         }
@@ -65,7 +65,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteGuidValue("id", Id);
-            writer.WriteEnumValue<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobAcceptedResponse_status>("status", Status);
+            writer.WriteEnumValue<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.QueuedStatus>("status", Status);
             writer.WriteStringValue("statusUrl", StatusUrl);
             writer.WriteAdditionalData(AdditionalData);
         }

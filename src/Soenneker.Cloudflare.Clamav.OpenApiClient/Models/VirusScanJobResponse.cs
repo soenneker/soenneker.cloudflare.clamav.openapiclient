@@ -38,7 +38,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
         public global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse Result { get; set; }
 #endif
         /// <summary>One of the serialized values defined by VirusScanJobStatus.</summary>
-        public global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobResponse_status? Status { get; set; }
+        public global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobResponseStatus? Status { get; set; }
         /// <summary>
         /// Instantiates a new <see cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobResponse"/> and sets the default values.
         /// </summary>
@@ -69,7 +69,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
                 { "error", n => { Error = n.GetStringValue(); } },
                 { "id", n => { Id = n.GetGuidValue(); } },
                 { "result", n => { Result = n.GetObjectValue<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse>(global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse.CreateFromDiscriminatorValue); } },
-                { "status", n => { Status = n.GetEnumValue<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobResponse_status>(); } },
+                { "status", n => { Status = n.GetEnumValue<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobResponseStatus>(); } },
             };
         }
         /// <summary>
@@ -84,7 +84,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
             writer.WriteStringValue("error", Error);
             writer.WriteGuidValue("id", Id);
             writer.WriteObjectValue<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse>("result", Result);
-            writer.WriteEnumValue<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobResponse_status>("status", Status);
+            writer.WriteEnumValue<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobResponseStatus>("status", Status);
             writer.WriteAdditionalData(AdditionalData);
         }
     }
