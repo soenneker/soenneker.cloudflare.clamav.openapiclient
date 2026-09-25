@@ -14,10 +14,9 @@
     "/health": {
       "get": {
         "tags": [
-          "Scanner"
+          "Soenneker.Cloudflare.Clamav"
         ],
-        "summary": "Queries ClamAV for its version to check scanner readiness.",
-        "description": "This check does not verify R2 access or definition freshness. Version-query exceptions propagate.",
+        "summary": "Queries ClamAV readiness.",
         "operationId": "Health",
         "responses": {
           "200": {
@@ -47,10 +46,9 @@
     "/scan": {
       "post": {
         "tags": [
-          "Scanner"
+          "Soenneker.Cloudflare.Clamav"
         ],
         "summary": "Accepts a raw file upload and waits for its scan verdict.",
-        "description": "The request body is written to a temporary file before ownership transfers to the scan pipeline.\nDisconnecting after enqueueing does not cancel the queued scan. Scan failures propagate to the HTTP pipeline.",
         "operationId": "Scan",
         "requestBody": {
           "description": "Raw file bytes, not multipart form data. The default upload limit is 100 MiB and can be configured by the operator.",
@@ -112,10 +110,9 @@
     "/scan/jobs": {
       "post": {
         "tags": [
-          "Scanner"
+          "Soenneker.Cloudflare.Clamav"
         ],
-        "summary": "Accepts a raw file upload for background scanning and returns a polling location.",
-        "description": "Acceptance persists job metadata; uploaded files and pending work remain local to the container.",
+        "summary": "Accepts a raw file upload for background scanning.",
         "operationId": "Queue",
         "requestBody": {
           "description": "Raw file bytes, not multipart form data. The default upload limit is 100 MiB and can be configured by the operator.",
@@ -177,7 +174,7 @@
     "/scan/jobs/{jobId}": {
       "get": {
         "tags": [
-          "Scanner"
+          "Soenneker.Cloudflare.Clamav"
         ],
         "summary": "Retrieves the latest persisted state of a background scan.",
         "operationId": "GetJob",
@@ -185,7 +182,6 @@
           {
             "name": "jobId",
             "in": "path",
-            "description": "The job identifier in standard dashed GUID format.",
             "required": true,
             "schema": {
               "type": "string"
@@ -415,7 +411,7 @@
   },
   "tags": [
     {
-      "name": "Scanner"
+      "name": "Soenneker.Cloudflare.Clamav"
     }
   ]
 }

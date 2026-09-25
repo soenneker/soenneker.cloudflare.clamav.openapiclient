@@ -19,7 +19,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Scan.Jobs
     public partial class JobsRequestBuilder : BaseRequestBuilder
     {
         /// <summary>Gets an item from the Soenneker.Cloudflare.Clamav.OpenApiClient.scan.jobs.item collection</summary>
-        /// <param name="position">The job identifier in standard dashed GUID format.</param>
+        /// <param name="position">Unique identifier of the item</param>
         /// <returns>A <see cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Scan.Jobs.Item.WithJobItemRequestBuilder"/></returns>
         public global::Soenneker.Cloudflare.Clamav.OpenApiClient.Scan.Jobs.Item.WithJobItemRequestBuilder this[string position]
         {
@@ -47,7 +47,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Scan.Jobs
         {
         }
         /// <summary>
-        /// Acceptance persists job metadata; uploaded files and pending work remain local to the container.
+        /// Accepts a raw file upload for background scanning.
         /// </summary>
         /// <returns>A <see cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobAcceptedResponse"/></returns>
         /// <param name="body">Binary request body</param>
@@ -74,7 +74,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Scan.Jobs
             return await RequestAdapter.SendAsync<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobAcceptedResponse>(requestInfo, global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobAcceptedResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Acceptance persists job metadata; uploaded files and pending work remain local to the container.
+        /// Accepts a raw file upload for background scanning.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">Binary request body</param>

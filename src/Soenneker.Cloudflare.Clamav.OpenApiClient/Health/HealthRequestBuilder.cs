@@ -34,7 +34,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Health
         {
         }
         /// <summary>
-        /// This check does not verify R2 access or definition freshness. Version-query exceptions propagate.
+        /// Queries ClamAV readiness.
         /// </summary>
         /// <returns>A <see cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.HealthResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -57,7 +57,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Health
             return await RequestAdapter.SendAsync<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.HealthResponse>(requestInfo, global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.HealthResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// This check does not verify R2 access or definition freshness. Version-query exceptions propagate.
+        /// Queries ClamAV readiness.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

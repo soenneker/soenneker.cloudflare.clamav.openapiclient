@@ -40,7 +40,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Scan
         {
         }
         /// <summary>
-        /// The request body is written to a temporary file before ownership transfers to the scan pipeline.Disconnecting after enqueueing does not cancel the queued scan. Scan failures propagate to the HTTP pipeline.
+        /// Accepts a raw file upload and waits for its scan verdict.
         /// </summary>
         /// <returns>A <see cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse"/></returns>
         /// <param name="body">Binary request body</param>
@@ -67,7 +67,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Scan
             return await RequestAdapter.SendAsync<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse>(requestInfo, global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// The request body is written to a temporary file before ownership transfers to the scan pipeline.Disconnecting after enqueueing does not cancel the queued scan. Scan failures propagate to the HTTP pipeline.
+        /// Accepts a raw file upload and waits for its scan verdict.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">Binary request body</param>
