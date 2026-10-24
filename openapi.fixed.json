@@ -386,7 +386,6 @@
         "description": "Contains the verdict returned by a completed malware scan."
       },
       "VirusScanJobResponseResult": {
-        "type": "object",
         "oneOf": [
           {
             "type": "null"
@@ -395,24 +394,7 @@
             "description": "The scan verdict for a completed job, otherwise \u0060null\u0060.",
             "$ref": "#/components/schemas/VirusScanResponse"
           }
-        ],
-        "properties": {
-          "clean": {
-            "type": "boolean",
-            "description": "Whether the scan reported the file as clean."
-          },
-          "threat": {
-            "type": [
-              "null",
-              "string"
-            ],
-            "description": "The first detected signature, or \u0060null\u0060 when no detection was returned."
-          },
-          "engine": {
-            "type": "string",
-            "description": "The scanning engine name, currently \u0060ClamAV\u0060."
-          }
-        }
+        ]
       },
       "ScanOctetStreamRequest": {
         "type": "string",
@@ -457,7 +439,6 @@
           "queued"
         ],
         "type": "string",
-        "additionalProperties": false,
         "description": "The initial job status, \u0060queued\u0060.",
         "x-ms-enum": {
           "name": "QueuedStatus",
@@ -478,7 +459,6 @@
           "failed"
         ],
         "type": "string",
-        "additionalProperties": false,
         "description": "One of the serialized values defined by VirusScanJobStatus.",
         "x-ms-enum": {
           "name": "VirusScanJobResponseStatus",
