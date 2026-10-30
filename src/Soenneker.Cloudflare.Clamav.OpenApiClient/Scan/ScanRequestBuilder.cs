@@ -40,14 +40,17 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Scan
         {
         }
         /// <summary>
-        /// Accepts a raw file upload and waits for its scan verdict.
+        /// Inspects raw file bytes under bounded resource limits.
         /// </summary>
         /// <returns>A <see cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse"/></returns>
         /// <param name="body">Binary request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 401 status code</exception>
+        /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 408 status code</exception>
         /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 413 status code</exception>
+        /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 429 status code</exception>
+        /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 503 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse?> PostAsync(Stream body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -62,12 +65,17 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Scan
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "401", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "408", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "413", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "429", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "503", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "4XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue },
+                { "5XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse>(requestInfo, global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Accepts a raw file upload and waits for its scan verdict.
+        /// Inspects raw file bytes under bounded resource limits.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">Binary request body</param>

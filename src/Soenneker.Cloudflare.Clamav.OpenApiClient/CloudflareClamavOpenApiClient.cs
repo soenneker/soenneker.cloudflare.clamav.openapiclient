@@ -7,6 +7,7 @@ using Microsoft.Kiota.Serialization.Json;
 using Microsoft.Kiota.Serialization.Multipart;
 using Microsoft.Kiota.Serialization.Text;
 using Soenneker.Cloudflare.Clamav.OpenApiClient.Health;
+using Soenneker.Cloudflare.Clamav.OpenApiClient.Ready;
 using Soenneker.Cloudflare.Clamav.OpenApiClient.Scan;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +25,11 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient
         public global::Soenneker.Cloudflare.Clamav.OpenApiClient.Health.HealthRequestBuilder Health
         {
             get => new global::Soenneker.Cloudflare.Clamav.OpenApiClient.Health.HealthRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The ready property</summary>
+        public global::Soenneker.Cloudflare.Clamav.OpenApiClient.Ready.ReadyRequestBuilder Ready
+        {
+            get => new global::Soenneker.Cloudflare.Clamav.OpenApiClient.Ready.ReadyRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The scan property</summary>
         public global::Soenneker.Cloudflare.Clamav.OpenApiClient.Scan.ScanRequestBuilder Scan

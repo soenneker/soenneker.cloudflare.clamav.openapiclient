@@ -8,31 +8,117 @@ using System;
 namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
 {
     /// <summary>
-    /// Contains the verdict returned by a completed malware scan.
+    /// A scan verdict bound to the uploaded bytes and the loaded signature database.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class VirusScanResponse : IAdditionalDataHolder, IParsable
-    {
+    , global::Soenneker.OpenApi.Generated.IOpenApiExplicitNulls {
+        // Track explicitly assigned nulls separately from absent properties.
+        private global::System.Collections.Generic.HashSet<string> _explicitNullProperties = null!;
+
+        public virtual void CaptureExplicitNulls(global::Microsoft.Kiota.Abstractions.Serialization.IParseNode parseNode)
+        {
+            if (parseNode.GetChildNode("clean") is { } nullNodeClean && nullNodeClean.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) Clean = null;
+            if (parseNode.GetChildNode("durationMilliseconds") is { } nullNodeDurationMilliseconds && nullNodeDurationMilliseconds.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) DurationMilliseconds = null;
+            if (parseNode.GetChildNode("engine") is { } nullNodeEngine && nullNodeEngine.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) Engine = null;
+            if (parseNode.GetChildNode("engineVersion") is { } nullNodeEngineVersion && nullNodeEngineVersion.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) EngineVersion = null;
+            if (parseNode.GetChildNode("reason") is { } nullNodeReason && nullNodeReason.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) Reason = null;
+            if (parseNode.GetChildNode("scanId") is { } nullNodeScanId && nullNodeScanId.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) ScanId = null;
+            if (parseNode.GetChildNode("sha256") is { } nullNodeSha256 && nullNodeSha256.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) Sha256 = null;
+            if (parseNode.GetChildNode("signatureDate") is { } nullNodeSignatureDate && nullNodeSignatureDate.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) SignatureDate = null;
+            if (parseNode.GetChildNode("signatureVersion") is { } nullNodeSignatureVersion && nullNodeSignatureVersion.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) SignatureVersion = null;
+            if (parseNode.GetChildNode("size") is { } nullNodeSize && nullNodeSize.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) Size = null;
+            if (parseNode.GetChildNode("threat") is { } nullNodeThreat && nullNodeThreat.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) Threat = null;
+            if (parseNode.GetChildNode("verdict") is { } nullNodeVerdict && nullNodeVerdict.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) Verdict = null;
+        }
+
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
-        /// <summary>Whether the scan reported the file as clean.</summary>
-        public bool? Clean { get; set; }
-        /// <summary>The scanning engine name, currently `ClamAV`.</summary>
+        /// <summary>The clean property</summary>
+        public bool? Clean { get => _explicitNullValueClean; set { _explicitNullValueClean = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("clean"); else _explicitNullProperties?.Remove("clean"); } }
+        private bool? _explicitNullValueClean = default!;
+        /// <summary>The durationMilliseconds property</summary>
+        public double? DurationMilliseconds { get => _explicitNullValueDurationMilliseconds; set { _explicitNullValueDurationMilliseconds = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("durationMilliseconds"); else _explicitNullProperties?.Remove("durationMilliseconds"); } }
+        private double? _explicitNullValueDurationMilliseconds = default!;
+        /// <summary>The engine property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public string? Engine { get; set; }
+        public string? Engine { get => _explicitNullValueEngine; set { _explicitNullValueEngine = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("engine"); else _explicitNullProperties?.Remove("engine"); } }
+        private string? _explicitNullValueEngine = default!;
 #nullable restore
 #else
-        public string Engine { get; set; }
+        public string Engine { get => _explicitNullValueEngine; set { _explicitNullValueEngine = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("engine"); else _explicitNullProperties?.Remove("engine"); } }
+        private string _explicitNullValueEngine = default!;
 #endif
-        /// <summary>The first detected signature, or `null` when no detection was returned.</summary>
+        /// <summary>The engineVersion property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public string? Threat { get; set; }
+        public string? EngineVersion { get => _explicitNullValueEngineVersion; set { _explicitNullValueEngineVersion = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("engineVersion"); else _explicitNullProperties?.Remove("engineVersion"); } }
+        private string? _explicitNullValueEngineVersion = default!;
 #nullable restore
 #else
-        public string Threat { get; set; }
+        public string EngineVersion { get => _explicitNullValueEngineVersion; set { _explicitNullValueEngineVersion = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("engineVersion"); else _explicitNullProperties?.Remove("engineVersion"); } }
+        private string _explicitNullValueEngineVersion = default!;
 #endif
+        /// <summary>The reason property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Reason { get => _explicitNullValueReason; set { _explicitNullValueReason = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("reason"); else _explicitNullProperties?.Remove("reason"); } }
+        private string? _explicitNullValueReason = default!;
+#nullable restore
+#else
+        public string Reason { get => _explicitNullValueReason; set { _explicitNullValueReason = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("reason"); else _explicitNullProperties?.Remove("reason"); } }
+        private string _explicitNullValueReason = default!;
+#endif
+        /// <summary>The scanId property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? ScanId { get => _explicitNullValueScanId; set { _explicitNullValueScanId = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("scanId"); else _explicitNullProperties?.Remove("scanId"); } }
+        private string? _explicitNullValueScanId = default!;
+#nullable restore
+#else
+        public string ScanId { get => _explicitNullValueScanId; set { _explicitNullValueScanId = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("scanId"); else _explicitNullProperties?.Remove("scanId"); } }
+        private string _explicitNullValueScanId = default!;
+#endif
+        /// <summary>The sha256 property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Sha256 { get => _explicitNullValueSha256; set { _explicitNullValueSha256 = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("sha256"); else _explicitNullProperties?.Remove("sha256"); } }
+        private string? _explicitNullValueSha256 = default!;
+#nullable restore
+#else
+        public string Sha256 { get => _explicitNullValueSha256; set { _explicitNullValueSha256 = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("sha256"); else _explicitNullProperties?.Remove("sha256"); } }
+        private string _explicitNullValueSha256 = default!;
+#endif
+        /// <summary>The signatureDate property</summary>
+        public DateTimeOffset? SignatureDate { get => _explicitNullValueSignatureDate; set { _explicitNullValueSignatureDate = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("signatureDate"); else _explicitNullProperties?.Remove("signatureDate"); } }
+        private DateTimeOffset? _explicitNullValueSignatureDate = default!;
+        /// <summary>The signatureVersion property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? SignatureVersion { get => _explicitNullValueSignatureVersion; set { _explicitNullValueSignatureVersion = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("signatureVersion"); else _explicitNullProperties?.Remove("signatureVersion"); } }
+        private string? _explicitNullValueSignatureVersion = default!;
+#nullable restore
+#else
+        public string SignatureVersion { get => _explicitNullValueSignatureVersion; set { _explicitNullValueSignatureVersion = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("signatureVersion"); else _explicitNullProperties?.Remove("signatureVersion"); } }
+        private string _explicitNullValueSignatureVersion = default!;
+#endif
+        /// <summary>The size property</summary>
+        public long? Size { get => _explicitNullValueSize; set { _explicitNullValueSize = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("size"); else _explicitNullProperties?.Remove("size"); } }
+        private long? _explicitNullValueSize = default!;
+        /// <summary>The threat property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Threat { get => _explicitNullValueThreat; set { _explicitNullValueThreat = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("threat"); else _explicitNullProperties?.Remove("threat"); } }
+        private string? _explicitNullValueThreat = default!;
+#nullable restore
+#else
+        public string Threat { get => _explicitNullValueThreat; set { _explicitNullValueThreat = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("threat"); else _explicitNullProperties?.Remove("threat"); } }
+        private string _explicitNullValueThreat = default!;
+#endif
+        /// <summary>The verdict property</summary>
+        public global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponseVerdict? Verdict { get => _explicitNullValueVerdict; set { _explicitNullValueVerdict = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("verdict"); else _explicitNullProperties?.Remove("verdict"); } }
+        private global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponseVerdict? _explicitNullValueVerdict = default!;
         /// <summary>
         /// Instantiates a new <see cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse"/> and sets the default values.
         /// </summary>
@@ -48,7 +134,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
         public static global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse CreateFromDiscriminatorValue(IParseNode parseNode)
         {
             if(ReferenceEquals(parseNode, null)) throw new ArgumentNullException(nameof(parseNode));
-            return new global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse();
+            return global::Soenneker.OpenApi.Generated.OpenApiNullTracking.Capture(new global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponse(), parseNode);
         }
         /// <summary>
         /// The deserialization information for the current model
@@ -59,8 +145,17 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "clean", n => { Clean = n.GetBoolValue(); } },
+                { "durationMilliseconds", n => { DurationMilliseconds = n.GetDoubleValue(); } },
                 { "engine", n => { Engine = n.GetStringValue(); } },
+                { "engineVersion", n => { EngineVersion = n.GetStringValue(); } },
+                { "reason", n => { Reason = n.GetStringValue(); } },
+                { "scanId", n => { ScanId = n.GetStringValue(); } },
+                { "sha256", n => { Sha256 = n.GetStringValue(); } },
+                { "signatureDate", n => { SignatureDate = n.GetDateTimeOffsetValue(); } },
+                { "signatureVersion", n => { SignatureVersion = n.GetStringValue(); } },
+                { "size", n => { Size = n.GetLongValue(); } },
                 { "threat", n => { Threat = n.GetStringValue(); } },
+                { "verdict", n => { Verdict = n.GetEnumValue<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponseVerdict>(); } },
             };
         }
         /// <summary>
@@ -71,8 +166,18 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteBoolValue("clean", Clean);
+            writer.WriteDoubleValue("durationMilliseconds", DurationMilliseconds);
             writer.WriteStringValue("engine", Engine);
+            writer.WriteStringValue("engineVersion", EngineVersion);
+            writer.WriteStringValue("reason", Reason);
+            writer.WriteStringValue("scanId", ScanId);
+            writer.WriteStringValue("sha256", Sha256);
+            writer.WriteDateTimeOffsetValue("signatureDate", SignatureDate);
+            writer.WriteStringValue("signatureVersion", SignatureVersion);
+            writer.WriteLongValue("size", Size);
             writer.WriteStringValue("threat", Threat);
+            writer.WriteEnumValue<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanResponseVerdict>("verdict", Verdict);
+            if (_explicitNullProperties != null) foreach (string name in _explicitNullProperties) writer.WriteNullValue(name);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

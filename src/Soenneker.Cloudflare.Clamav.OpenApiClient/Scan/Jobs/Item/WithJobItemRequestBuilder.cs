@@ -34,13 +34,14 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Scan.Jobs.Item
         {
         }
         /// <summary>
-        /// Retrieves the latest persisted state of a background scan.
+        /// Retrieves durable job state through the Worker.
         /// </summary>
         /// <returns>A <see cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobResponse"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 401 status code</exception>
         /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 404 status code</exception>
+        /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 501 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobResponse?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -55,11 +56,14 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Scan.Jobs.Item
             {
                 { "401", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "404", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "501", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "4XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue },
+                { "5XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobResponse>(requestInfo, global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Retrieves the latest persisted state of a background scan.
+        /// Retrieves durable job state through the Worker.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

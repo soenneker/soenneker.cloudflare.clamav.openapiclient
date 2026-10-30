@@ -9,17 +9,56 @@ using System;
 namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
 {
     /// <summary>
-    /// Reports whether the ClamAV version query returned a nonempty result.
+    /// Readiness of the daemon and its currently loaded signatures.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class HealthResponse : ApiException, IAdditionalDataHolder, IParsable
-    {
+    , global::Soenneker.OpenApi.Generated.IOpenApiExplicitNulls {
+        // Track explicitly assigned nulls separately from absent properties.
+        private global::System.Collections.Generic.HashSet<string> _explicitNullProperties = null!;
+
+        public virtual void CaptureExplicitNulls(global::Microsoft.Kiota.Abstractions.Serialization.IParseNode parseNode)
+        {
+            if (parseNode.GetChildNode("engineVersion") is { } nullNodeEngineVersion && nullNodeEngineVersion.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) EngineVersion = null;
+            if (parseNode.GetChildNode("lastUpdateAt") is { } nullNodeLastUpdateAt && nullNodeLastUpdateAt.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) LastUpdateAt = null;
+            if (parseNode.GetChildNode("ready") is { } nullNodeReady && nullNodeReady.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) Ready = null;
+            if (parseNode.GetChildNode("signatureDate") is { } nullNodeSignatureDate && nullNodeSignatureDate.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) SignatureDate = null;
+            if (parseNode.GetChildNode("signatureVersion") is { } nullNodeSignatureVersion && nullNodeSignatureVersion.GetObjectValue<global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode>(global::Microsoft.Kiota.Abstractions.Serialization.UntypedNode.CreateFromDiscriminatorValue) is null or global::Microsoft.Kiota.Abstractions.Serialization.UntypedNull) SignatureVersion = null;
+        }
+
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
+        /// <summary>The engineVersion property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? EngineVersion { get => _explicitNullValueEngineVersion; set { _explicitNullValueEngineVersion = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("engineVersion"); else _explicitNullProperties?.Remove("engineVersion"); } }
+        private string? _explicitNullValueEngineVersion = default!;
+#nullable restore
+#else
+        public string EngineVersion { get => _explicitNullValueEngineVersion; set { _explicitNullValueEngineVersion = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("engineVersion"); else _explicitNullProperties?.Remove("engineVersion"); } }
+        private string _explicitNullValueEngineVersion = default!;
+#endif
+        /// <summary>The lastUpdateAt property</summary>
+        public DateTimeOffset? LastUpdateAt { get => _explicitNullValueLastUpdateAt; set { _explicitNullValueLastUpdateAt = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("lastUpdateAt"); else _explicitNullProperties?.Remove("lastUpdateAt"); } }
+        private DateTimeOffset? _explicitNullValueLastUpdateAt = default!;
         /// <summary>The primary error message.</summary>
         public override string Message { get => base.Message; }
-        /// <summary>Whether ClamAV reported a version. This does not verify R2 access or definition freshness.</summary>
-        public bool? Ready { get; set; }
+        /// <summary>The ready property</summary>
+        public bool? Ready { get => _explicitNullValueReady; set { _explicitNullValueReady = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("ready"); else _explicitNullProperties?.Remove("ready"); } }
+        private bool? _explicitNullValueReady = default!;
+        /// <summary>The signatureDate property</summary>
+        public DateTimeOffset? SignatureDate { get => _explicitNullValueSignatureDate; set { _explicitNullValueSignatureDate = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("signatureDate"); else _explicitNullProperties?.Remove("signatureDate"); } }
+        private DateTimeOffset? _explicitNullValueSignatureDate = default!;
+        /// <summary>The signatureVersion property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? SignatureVersion { get => _explicitNullValueSignatureVersion; set { _explicitNullValueSignatureVersion = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("signatureVersion"); else _explicitNullProperties?.Remove("signatureVersion"); } }
+        private string? _explicitNullValueSignatureVersion = default!;
+#nullable restore
+#else
+        public string SignatureVersion { get => _explicitNullValueSignatureVersion; set { _explicitNullValueSignatureVersion = value; if (value is null) (_explicitNullProperties ??= new global::System.Collections.Generic.HashSet<string>()).Add("signatureVersion"); else _explicitNullProperties?.Remove("signatureVersion"); } }
+        private string _explicitNullValueSignatureVersion = default!;
+#endif
         /// <summary>
         /// Instantiates a new <see cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.HealthResponse"/> and sets the default values.
         /// </summary>
@@ -35,7 +74,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
         public static global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.HealthResponse CreateFromDiscriminatorValue(IParseNode parseNode)
         {
             if(ReferenceEquals(parseNode, null)) throw new ArgumentNullException(nameof(parseNode));
-            return new global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.HealthResponse();
+            return global::Soenneker.OpenApi.Generated.OpenApiNullTracking.Capture(new global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.HealthResponse(), parseNode);
         }
         /// <summary>
         /// The deserialization information for the current model
@@ -45,7 +84,11 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "engineVersion", n => { EngineVersion = n.GetStringValue(); } },
+                { "lastUpdateAt", n => { LastUpdateAt = n.GetDateTimeOffsetValue(); } },
                 { "ready", n => { Ready = n.GetBoolValue(); } },
+                { "signatureDate", n => { SignatureDate = n.GetDateTimeOffsetValue(); } },
+                { "signatureVersion", n => { SignatureVersion = n.GetStringValue(); } },
             };
         }
         /// <summary>
@@ -55,7 +98,12 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteStringValue("engineVersion", EngineVersion);
+            writer.WriteDateTimeOffsetValue("lastUpdateAt", LastUpdateAt);
             writer.WriteBoolValue("ready", Ready);
+            writer.WriteDateTimeOffsetValue("signatureDate", SignatureDate);
+            writer.WriteStringValue("signatureVersion", SignatureVersion);
+            if (_explicitNullProperties != null) foreach (string name in _explicitNullProperties) writer.WriteNullValue(name);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

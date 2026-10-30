@@ -1,8 +1,8 @@
 {
-  "descriptionHash": "1EC8A698307B72AC9DBEE8AF2488653F15CCBAFDD0BC14203634B4CFE0860D5BB918C366233EA1CB677F493F0393CB04E1E009DB6DEB1691EC20D8D990A7BC3D",
+  "descriptionHash": "ABB329CE132351674AB3BB13484F90BB08A6AF74BEDCAA0D4EE2393E258AC956965DB4C5BE4C30229D1A87AE6EF4B6A3936882E4161BBCCCE7580D73F77F18FC",
   "descriptionLocation": "../../openapi.fixed.json",
   "lockFileVersion": "1.0.0",
-  "kiotaVersion": "1.36.1",
+  "kiotaVersion": "1.37.0",
   "clientClassName": "CloudflareClamavOpenApiClient",
   "typeAccessModifier": "Public",
   "clientNamespaceName": "Soenneker.Cloudflare.Clamav.OpenApiClient",

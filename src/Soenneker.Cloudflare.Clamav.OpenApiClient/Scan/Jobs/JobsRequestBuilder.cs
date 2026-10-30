@@ -47,14 +47,18 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Scan.Jobs
         {
         }
         /// <summary>
-        /// Accepts a raw file upload for background scanning.
+        /// Accepts a durable scan through the Worker; requires Idempotency-Key.
         /// </summary>
         /// <returns>A <see cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobAcceptedResponse"/></returns>
         /// <param name="body">Binary request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 400 status code</exception>
         /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 401 status code</exception>
+        /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 409 status code</exception>
         /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 413 status code</exception>
+        /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 429 status code</exception>
+        /// <exception cref="global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails">When receiving a 501 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobAcceptedResponse?> PostAsync(Stream body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -68,13 +72,19 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient.Scan.Jobs
             var requestInfo = ToPostRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "400", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "409", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "413", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "429", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "501", global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "4XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue },
+                { "5XX", global::Soenneker.OpenApi.Generated.OpenApiRawError.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobAcceptedResponse>(requestInfo, global::Soenneker.Cloudflare.Clamav.OpenApiClient.Models.VirusScanJobAcceptedResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Accepts a raw file upload for background scanning.
+        /// Accepts a durable scan through the Worker; requires Idempotency-Key.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">Binary request body</param>

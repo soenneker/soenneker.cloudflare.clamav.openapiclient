@@ -2,7 +2,7 @@
   "openapi": "3.1.2",
   "info": {
     "title": "Soenneker.Cloudflare.Clamav",
-    "description": "ClamAV file scanning with Cloudflare Containers and R2 job storage. Supply your deployment URL as the API base address.",
+    "description": "ClamAV file scanning with Cloudflare Containers, private R2 uploads, D1 job state, and Queues delivery. Supply your deployment URL as the API base address.",
     "version": "v1"
   },
   "servers": [
@@ -16,7 +16,7 @@
         "tags": [
           "Soenneker.Cloudflare.Clamav"
         ],
-        "summary": "Queries ClamAV readiness.",
+        "summary": "Checks HTTP host liveness.",
         "operationId": "Health",
         "responses": {
           "200": {
@@ -26,6 +26,44 @@
                 "schema": {
                   "$ref": "#/components/schemas/HealthResponse"
                 }
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/ready": {
+      "get": {
+        "tags": [
+          "Soenneker.Cloudflare.Clamav"
+        ],
+        "summary": "Checks the daemon and loaded signature freshness.",
+        "operationId": "Ready",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ready401PlainResponseSchema"
+                },
+                "example": "Unauthorized"
               }
             }
           },
@@ -40,7 +78,11 @@
             }
           }
         },
-        "security": []
+        "security": [
+          {
+            "ScannerApiKey": []
+          }
+        ]
       }
     },
     "/scan": {
@@ -48,7 +90,7 @@
         "tags": [
           "Soenneker.Cloudflare.Clamav"
         ],
-        "summary": "Accepts a raw file upload and waits for its scan verdict.",
+        "summary": "Inspects raw file bytes under bounded resource limits.",
         "operationId": "Scan",
         "requestBody": {
           "description": "Raw file bytes, not multipart form data. The default upload limit is 100 MiB and can be configured by the operator.",
@@ -88,8 +130,38 @@
               }
             }
           },
+          "408": {
+            "description": "Request Timeout",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "413": {
             "description": "Payload Too Large",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable",
             "content": {
               "application/problem\u002Bjson": {
                 "schema": {
@@ -111,8 +183,39 @@
         "tags": [
           "Soenneker.Cloudflare.Clamav"
         ],
-        "summary": "Accepts a raw file upload for background scanning.",
+        "summary": "Accepts a durable scan through the Worker; requires Idempotency-Key.",
         "operationId": "Queue",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Unique submission key, retained for seven days after completion. Reuse only with identical bytes.",
+            "required": true,
+            "schema": {
+              "maxLength": 128,
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-Content-SHA256",
+            "in": "header",
+            "description": "Lowercase SHA-256 of the raw upload. Storage verifies this checksum before acceptance.",
+            "required": true,
+            "schema": {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "Content-Length",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
         "requestBody": {
           "description": "Raw file bytes, not multipart form data. The default upload limit is 100 MiB and can be configured by the operator.",
           "content": {
@@ -135,6 +238,16 @@
               }
             }
           },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -151,8 +264,38 @@
               }
             }
           },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "413": {
             "description": "Payload Too Large",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Not Implemented",
             "content": {
               "application/problem\u002Bjson": {
                 "schema": {
@@ -174,7 +317,7 @@
         "tags": [
           "Soenneker.Cloudflare.Clamav"
         ],
-        "summary": "Retrieves the latest persisted state of a background scan.",
+        "summary": "Retrieves durable job state through the Worker.",
         "operationId": "GetJob",
         "parameters": [
           {
@@ -222,6 +365,16 @@
                 }
               }
             }
+          },
+          "501": {
+            "description": "Not Implemented",
+            "content": {
+              "application/problem\u002Bjson": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -241,11 +394,36 @@
         "type": "object",
         "properties": {
           "ready": {
-            "type": "boolean",
-            "description": "Whether ClamAV reported a version. This does not verify R2 access or definition freshness."
+            "type": "boolean"
+          },
+          "engineVersion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "signatureVersion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "signatureDate": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "lastUpdateAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
           }
         },
-        "description": "Reports whether the ClamAV version query returned a nonempty result."
+        "description": "Readiness of the daemon and its currently loaded signatures."
       },
       "ProblemDetails": {
         "type": "object",
@@ -305,7 +483,7 @@
             "format": "uuid"
           },
           "status": {
-            "$ref": "#/components/schemas/QueuedStatus"
+            "$ref": "#/components/schemas/VirusScanJobAcceptedResponseStatus"
           },
           "statusUrl": {
             "type": "string",
@@ -355,6 +533,19 @@
             ],
             "description": "The UTC timestamp at which the job completed or failed, or \u0060null\u0060 while pending.",
             "format": "date-time"
+          },
+          "attempts": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "description": "Number of processing leases acquired for this job.",
+            "format": "int32",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
           }
         },
         "description": "Represents a persisted snapshot of a background scan\u0027s lifecycle and outcome."
@@ -368,22 +559,68 @@
         "type": "object",
         "properties": {
           "clean": {
-            "type": "boolean",
-            "description": "Whether the scan reported the file as clean."
+            "type": "boolean"
           },
           "threat": {
             "type": [
               "null",
               "string"
-            ],
-            "description": "The first detected signature, or \u0060null\u0060 when no detection was returned."
+            ]
           },
           "engine": {
-            "type": "string",
-            "description": "The scanning engine name, currently \u0060ClamAV\u0060."
+            "type": "string"
+          },
+          "verdict": {
+            "$ref": "#/components/schemas/VirusScanResponseVerdict"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "scanId": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "size": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "format": "int64",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "engineVersion": {
+            "type": "string"
+          },
+          "signatureVersion": {
+            "type": "string"
+          },
+          "signatureDate": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "durationMilliseconds": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d\u002B)?(?:[eE][\u002B-]?\\d\u002B)?$",
+            "format": "double",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ]
           }
         },
-        "description": "Contains the verdict returned by a completed malware scan."
+        "description": "A scan verdict bound to the uploaded bytes and the loaded signature database."
       },
       "VirusScanJobResponseResult": {
         "oneOf": [
@@ -395,6 +632,9 @@
             "$ref": "#/components/schemas/VirusScanResponse"
           }
         ]
+      },
+      "Ready401PlainResponse": {
+        "type": "string"
       },
       "ScanOctetStreamRequest": {
         "type": "string",
@@ -417,6 +657,9 @@
         "type": "object",
         "description": "Placeholder schema for path example refs"
       },
+      "Ready401PlainResponseSchema": {
+        "type": "string"
+      },
       "ScanOctetStreamRequestRequestBody": {
         "type": "string",
         "format": "binary"
@@ -434,19 +677,34 @@
       "GetJob401PlainResponseSchema": {
         "type": "string"
       },
-      "QueuedStatus": {
+      "VirusScanJobAcceptedResponseStatus": {
         "enum": [
-          "queued"
+          "queued",
+          "processing",
+          "completed",
+          "failed"
         ],
         "type": "string",
-        "description": "The initial job status, \u0060queued\u0060.",
+        "description": "The current job status; an idempotent replay can return an already completed job.",
         "x-ms-enum": {
-          "name": "QueuedStatus",
+          "name": "VirusScanJobAcceptedResponseStatus",
           "modelAsString": false,
           "values": [
             {
               "value": "queued",
               "name": "Queued"
+            },
+            {
+              "value": "processing",
+              "name": "Processing"
+            },
+            {
+              "value": "completed",
+              "name": "Completed"
+            },
+            {
+              "value": "failed",
+              "name": "Failed"
             }
           ]
         }
@@ -479,6 +737,37 @@
             {
               "value": "failed",
               "name": "Failed"
+            }
+          ]
+        }
+      },
+      "VirusScanResponseVerdict": {
+        "enum": [
+          "clean",
+          "infected",
+          "inconclusive",
+          "error"
+        ],
+        "type": "string",
+        "x-ms-enum": {
+          "name": "VirusScanResponseVerdict",
+          "modelAsString": false,
+          "values": [
+            {
+              "value": "clean",
+              "name": "Clean"
+            },
+            {
+              "value": "infected",
+              "name": "Infected"
+            },
+            {
+              "value": "inconclusive",
+              "name": "Inconclusive"
+            },
+            {
+              "value": "error",
+              "name": "Error"
             }
           ]
         }
