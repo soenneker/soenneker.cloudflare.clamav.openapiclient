@@ -303,6 +303,17 @@
                 }
               }
             }
+          },
+          "200": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VirusScanJobAcceptedResponse"
+                }
+              }
+            },
+            "x-client-success-response-status": "202"
           }
         },
         "security": [
