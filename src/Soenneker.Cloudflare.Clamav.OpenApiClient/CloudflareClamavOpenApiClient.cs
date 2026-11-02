@@ -47,7 +47,7 @@ namespace Soenneker.Cloudflare.Clamav.OpenApiClient
             ApiClientBuilder.RegisterDefaultSerializer<FormSerializationWriterFactory>();
             ApiClientBuilder.RegisterDefaultSerializer<MultipartSerializationWriterFactory>();
             ApiClientBuilder.RegisterDefaultDeserializer<JsonParseNodeFactory>();
-            ApiClientBuilder.RegisterDefaultDeserializer<TextParseNodeFactory>();
+            global::Soenneker.OpenApi.Generated.OpenApiTextParseNodeFactory.Register();
             ApiClientBuilder.RegisterDefaultDeserializer<FormParseNodeFactory>();
         }
     }

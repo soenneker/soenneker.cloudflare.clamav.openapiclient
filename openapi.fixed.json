@@ -61,7 +61,7 @@
               },
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ready401PlainResponseSchema"
+                  "$ref": "#/components/schemas/Ready401PlainResponseSchemaError"
                 },
                 "example": "Unauthorized"
               }
@@ -124,7 +124,7 @@
               },
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Scan401PlainResponseSchema"
+                  "$ref": "#/components/schemas/Scan401PlainResponseSchemaError"
                 },
                 "example": "Unauthorized"
               }
@@ -258,7 +258,7 @@
               },
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/Queue401PlainResponseSchema"
+                  "$ref": "#/components/schemas/Queue401PlainResponseSchemaError"
                 },
                 "example": "Unauthorized"
               }
@@ -361,7 +361,7 @@
               },
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetJob401PlainResponseSchema"
+                  "$ref": "#/components/schemas/GetJob401PlainResponseSchemaError"
                 },
                 "example": "Unauthorized"
               }
@@ -453,7 +453,6 @@
           },
           "status": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "format": "int32",
             "anyOf": [
               {
                 "type": "null"
@@ -464,7 +463,8 @@
               {
                 "type": "string"
               }
-            ]
+            ],
+            "x-client-original-format": "int32"
           },
           "detail": {
             "type": [
@@ -548,7 +548,6 @@
           "attempts": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
             "description": "Number of processing leases acquired for this job.",
-            "format": "int32",
             "anyOf": [
               {
                 "type": "integer"
@@ -556,7 +555,8 @@
               {
                 "type": "string"
               }
-            ]
+            ],
+            "x-client-original-format": "int32"
           }
         },
         "description": "Represents a persisted snapshot of a background scan\u0027s lifecycle and outcome."
@@ -595,7 +595,6 @@
           },
           "size": {
             "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "format": "int64",
             "anyOf": [
               {
                 "type": "integer"
@@ -603,7 +602,8 @@
               {
                 "type": "string"
               }
-            ]
+            ],
+            "x-client-original-format": "int64"
           },
           "engineVersion": {
             "type": "string"
@@ -620,7 +620,6 @@
           },
           "durationMilliseconds": {
             "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d\u002B)?(?:[eE][\u002B-]?\\d\u002B)?$",
-            "format": "double",
             "anyOf": [
               {
                 "type": "number"
@@ -628,45 +627,97 @@
               {
                 "type": "string"
               }
-            ]
+            ],
+            "x-client-original-format": "double"
           }
         },
         "description": "A scan verdict bound to the uploaded bytes and the loaded signature database."
       },
       "VirusScanJobResponseResult": {
-        "oneOf": [
-          {
-            "type": "null"
+        "required": [
+          "clean",
+          "threat",
+          "engine"
+        ],
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "clean": {
+            "type": "boolean"
           },
-          {
-            "description": "The scan verdict for a completed job, otherwise \u0060null\u0060.",
-            "$ref": "#/components/schemas/VirusScanResponse"
+          "threat": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "engine": {
+            "type": "string"
+          },
+          "verdict": {
+            "$ref": "#/components/schemas/VirusScanResponseVerdict"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "scanId": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "size": {
+            "pattern": "^-?(?:0|[1-9]\\d*)$",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "x-client-original-format": "int64"
+          },
+          "engineVersion": {
+            "type": "string"
+          },
+          "signatureVersion": {
+            "type": "string"
+          },
+          "signatureDate": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "durationMilliseconds": {
+            "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d\u002B)?(?:[eE][\u002B-]?\\d\u002B)?$",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "x-client-original-format": "double"
           }
-        ]
-      },
-      "Ready401PlainResponse": {
-        "type": "string"
-      },
-      "ScanOctetStreamRequest": {
-        "type": "string",
-        "format": "binary"
-      },
-      "Scan401PlainResponse": {
-        "type": "string"
-      },
-      "QueueOctetStreamRequest": {
-        "type": "string",
-        "format": "binary"
-      },
-      "Queue401PlainResponse": {
-        "type": "string"
-      },
-      "GetJob401PlainResponse": {
-        "type": "string"
-      },
-      "ExamplePayload": {
-        "type": "object",
-        "description": "Placeholder schema for path example refs"
+        },
+        "description": "The scan verdict for a completed job, otherwise \u0060null\u0060.",
+        "x-client-original-nullable-union": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "description": "The scan verdict for a completed job, otherwise \u0060null\u0060.",
+              "$ref": "#/components/schemas/VirusScanResponse"
+            }
+          ]
+        }
       },
       "Ready401PlainResponseSchema": {
         "type": "string"
@@ -782,6 +833,66 @@
             }
           ]
         }
+      },
+      "Ready401PlainResponseSchemaError": {
+        "type": "object",
+        "properties": {
+          "payload": {
+            "x-client-untyped-value": true
+          }
+        },
+        "x-client-raw-error-media-type": "text/plain",
+        "x-client-raw-error-schema": {
+          "$ref": "#/components/schemas/Ready401PlainResponseSchema"
+        },
+        "x-client-original-error-schema": {
+          "$ref": "#/components/schemas/Ready401PlainResponseSchema"
+        }
+      },
+      "Scan401PlainResponseSchemaError": {
+        "type": "object",
+        "properties": {
+          "payload": {
+            "x-client-untyped-value": true
+          }
+        },
+        "x-client-raw-error-media-type": "text/plain",
+        "x-client-raw-error-schema": {
+          "$ref": "#/components/schemas/Scan401PlainResponseSchema"
+        },
+        "x-client-original-error-schema": {
+          "$ref": "#/components/schemas/Scan401PlainResponseSchema"
+        }
+      },
+      "Queue401PlainResponseSchemaError": {
+        "type": "object",
+        "properties": {
+          "payload": {
+            "x-client-untyped-value": true
+          }
+        },
+        "x-client-raw-error-media-type": "text/plain",
+        "x-client-raw-error-schema": {
+          "$ref": "#/components/schemas/Queue401PlainResponseSchema"
+        },
+        "x-client-original-error-schema": {
+          "$ref": "#/components/schemas/Queue401PlainResponseSchema"
+        }
+      },
+      "GetJob401PlainResponseSchemaError": {
+        "type": "object",
+        "properties": {
+          "payload": {
+            "x-client-untyped-value": true
+          }
+        },
+        "x-client-raw-error-media-type": "text/plain",
+        "x-client-raw-error-schema": {
+          "$ref": "#/components/schemas/GetJob401PlainResponseSchema"
+        },
+        "x-client-original-error-schema": {
+          "$ref": "#/components/schemas/GetJob401PlainResponseSchema"
+        }
       }
     },
     "securitySchemes": {
@@ -796,5 +907,31 @@
     {
       "name": "Soenneker.Cloudflare.Clamav"
     }
-  ]
+  ],
+  "x-client-unused-schemas": {
+    "Ready401PlainResponse": {
+      "type": "string"
+    },
+    "ScanOctetStreamRequest": {
+      "type": "string",
+      "format": "binary"
+    },
+    "Scan401PlainResponse": {
+      "type": "string"
+    },
+    "QueueOctetStreamRequest": {
+      "type": "string",
+      "format": "binary"
+    },
+    "Queue401PlainResponse": {
+      "type": "string"
+    },
+    "GetJob401PlainResponse": {
+      "type": "string"
+    },
+    "ExamplePayload": {
+      "type": "object",
+      "description": "Placeholder schema for path example refs"
+    }
+  }
 }
